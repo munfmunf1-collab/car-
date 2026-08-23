@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoFix Pro — Car Repair Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .nav-link.active-link { color: #818CF8; }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+        .hero-gradient {
+            background: linear-gradient(to bottom right, #0F172A, #1E293B);
+        }
+        .card-hover { transition: all 300ms ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .img-hover { transition: transform 500ms ease; }
+        .img-hover:hover { transform: scale(1.05); }
+        .blob {
+            position: absolute;
+            border-radius: 9999px;
+            filter: blur(64px);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        html { scroll-behavior: smooth; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .page.active { animation: fadeIn 0.4s ease forwards; }
+        .mobile-menu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .mobile-menu.open { max-height: 300px; }
+    </style>
+</head>
+<body class="bg-white text-slate-900 antialiased">
+
+    <!-- ============ NAVBAR ============ -->
+    <nav class="glass-nav fixed top-0 left-0 right-0 z-50 h-16">
+        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+            <a href="#" onclick="showPage('home')" class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+                    <span class="iconify text-white text-lg" data-icon="mdi:car-wrench"></span>
+                </div>
+                <span class="font-semibold text-lg tracking-tight">AutoFix<span class="text-indigo-600">Pro</span></span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#" onclick="showPage('home')" class="nav-link active-link text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors" data-page="home">Home</a>
+                <a href="#" onclick="showPage('services')" class="nav-link text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors" data-page="services">Services</a>
+                <a href="#" onclick="showPage('about')" class="nav-link text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors" data-page="about">About</a>
+                <a href="#" onclick="showPage('contact')" class="nav-link text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors" data-page="contact">Contact</a>
+            </div>
+
+            <div class="hidden md:flex items-center gap-3">
+                <a href="tel:+15551234567" class="text-sm text-slate-600 flex items-center gap-1.5">
+                    <span class="iconify text-indigo-600" data-icon="mdi:phone"></span>
+                    (555) 123-4567
+                </a>
+                <a href="#" onclick="showPage('contact')" class="bg-indigo-600 text-white text-sm font-medium px-4 py-2.5 rounded-xl hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-500/20">
+                    Book Now
+                </a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button onclick="toggleMobile()" class="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors">
+                <span class="iconify text-2xl" data-icon="mdi:menu" id="menuIcon"></span>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu md:hidden bg-white/95 backdrop-blur-lg border-t border-slate-100" id="mobileMenu">
+            <div class="px-6 py-4 flex flex-col gap-3">
+                <a href="#" onclick="showPage('home');toggleMobile()" class="text-sm font-medium py-2 text-slate-600 hover:text-indigo-600">Home</a>
+                <a href="#" onclick="showPage('services');toggleMobile()" class="text-sm font-medium py-2 text-slate-600 hover:text-indigo-600">Services</a>
+                <a href="#" onclick="showPage('about');toggleMobile()" class="text-sm font-medium py-2 text-slate-600 hover:text-indigo-600">About</a>
+                <a href="#" onclick="showPage('contact');toggleMobile()" class="text-sm font-medium py-2 text-slate-600 hover:text-indigo-600">Contact</a>
+                <a href="tel:+15551234567" class="text-sm font-medium py-2 text-indigo-600 flex items-center gap-1.5">
+                    <span class="iconify" data-icon="mdi:phone"></span> (555) 123-4567
+                </a>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- ============ PAGE 1: HOME ============ -->
+    <div id="page-home" class="page active">
+
+        <!-- Hero -->
+        <section class="hero-gradient relative overflow-hidden pt-32 pb-20 lg:pt-48 lg:pb-32">
+            <div class="blob w-96 h-96 bg-indigo-600/30 top-10 -left-40"></div>
+            <div class="blob w-72 h-72 bg-indigo-400/20 bottom-10 right-10"></div>
+
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-1.5 mb-6">
+                            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                            <span class="text-xs font-medium text-slate-300">Open Now — Mon–Sat, 8AM–6PM</span>
+                        </div>
+                        <h1 class="text-4xl md:text-6xl font-semibold text-white tracking-tight leading-[1.1] mb-6">
+                            Expert Car Repair<br>
+                            <span class="text-indigo-400">You Can Trust</span>
+                        </h1>
+                        <p class="text-lg text-slate-400 leading-relaxed mb-8 max-w-lg">
+                            From oil changes to engine overhauls, our certified mechanics deliver quality repairs with honest pricing and fast turnaround.
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="#" onclick="showPage('contact')" class="bg-indigo-600 text-white font-medium px-6 py-3.5 rounded-xl hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-500/30 flex items-center gap-2">
+                                Schedule Repair
+                                <span class="iconify" data-icon="mdi:arrow-right"></span>
+                            </a>
+                            <a href="#" onclick="showPage('services')" class="bg-white/10 backdrop-blur-md text-white font-medium px-6 py-3.5 rounded-xl border border-white/20 hover:bg-white/20 transition-colors">
+                                View Services
+                            </a>
+                        </div>
+
+                        <!-- Trust Badges -->
+                        <div class="flex flex-wrap items-center gap-6 mt-10 pt-10 border-t border-white/10">
+                            <div>
+                                <div class="text-2xl font-semibold text-white">15+</div>
+                                <div class="text-xs text-slate-400">Years Experience</div>
+                            </div>
+                            <div class="w-px h-10 bg-white/10"></div>
+                            <div>
+                                <div class="text-2xl font-semibold text-white">8,000+</div>
+                                <div class="text-xs text-slate-400">Cars Repaired</div>
+                            </div>
+                            <div class="w-px h-10 bg-white/10"></div>
+                            <div>
+                                <div class="text-2xl font-semibold text-white">4.9★</div>
+                                <div class="text-xs text-slate-400">Customer Rating</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative hidden lg:block">
+                        <div class="rounded-2xl overflow-hidden shadow-2xl">
+                            <img src="https://picsum.photos/seed/autofix-hero/640/480.jpg" alt="Car repair" class="w-full h-auto object-cover">
+                        </div>
+                        <!-- Floating Card -->
+                        <div class="absolute -bottom-6 -left-6 bg-white/95 backdrop-blur-lg rounded-2xl p-4 shadow-xl border border-slate-100 flex items-center gap-3">
+                            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                <span class="iconify text-green-600 text-2xl" data-icon="mdi:check-circle"></span>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-slate-900">Repair Complete</div>
+                                <div class="text-xs text-slate-500">2019 Honda Civic — 2h ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Preview -->
+        <section class="py-24 bg-slate-50">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <span class="inline-block text-xs font-semibold uppercase tracking-widest text-indigo-600 mb-3">What We Do</span>
+                    <h2 class="text-3xl md:text-4xl font-semibold tracking-tight">Our Top Services</h2>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-2xl p-8 card-hover border border-slate-100">
+                        <div class="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center mb-5">
+                            <span class="iconify text-indigo-600 text-2xl" data-icon="mdi:engine"></span>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Engine Repair</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">Complete diagnostics and repair for all engine types. We fix it right the first time.</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-8 card-hover border border-slate-100">
+                        <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mb-5">
+                            <span class="iconify text-orange-600 text-2xl" data-icon="mdi:oil"></span>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Oil & Fluids</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">Quick oil changes and full fluid top-ups to keep your engine running smoothly.</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-8 card-hover border border-slate-100">
+                        <div class="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center mb-5">
+                            <span class="iconify text-green-600 text-2xl" data-icon="mdi:car-brake-abs"></span>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Brake Service</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">Pads, rotors, calipers, and full brake system inspection for your safety.</p>
+                    </div>
+                </div>
+                <div class="text-center mt-12">
+                    <a href="#" onclick="showPage('services')" class="inline-flex items-center gap-2 text-indigo-600 font-medium text-sm hover:gap-3 transition-all">
+                        View All Services <span class="iconify" data-icon="mdi:arrow-right"></span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section class="py-24">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="rounded-2xl overflow-hidden">
+                        <img src="https://picsum.photos/seed/mechanic-work/640/500.jpg" alt="Mechanic at work" class="w-full h-auto img-hover">
+                    </div>
+                    <div>
+                        <span class="inline-block text-xs font-semibold uppercase tracking-widest text-indigo-600 mb-3">Why Choose Us</span>
+                        <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-6">Honest Mechanics, Quality Work</h2>
+                        <p class="text-slate-500 leading-relaxed mb-8">We treat every car like our own. No unnecessary repairs, no hidden fees — just reliable service from ASE-certified technicians.</p>
+                        <div class="space-y-5">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="iconify text-indigo-600" data-icon="mdi:shield-check"></span>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-sm mb-1">12-Month Warranty</h4>
+                                    <p class="text-sm text-slate-500">All repairs backed by a full 12-month / 12,000-mile warranty.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="iconify text-green-600" data-icon="mdi:cash-check"></span>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-sm mb-1">Upfront Pricing</h4>
+                                    <p class="text-sm text-slate-500">We provide a detailed estimate before any work begins. No surprises.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="iconify text-orange-600" data-icon="mdi:clock-fast"></span>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-sm mb-1">Same-Day Service</h4>
+                                    <p class="text-sm text-slate-500">Most repairs completed the same day. Free pickup & drop-off available.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="py-24 bg-slate-50">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-4">Car Trouble? Don't Wait.</h2>
+                <p class="text-slate-500 text-lg leading-relaxed mb-8 max-w-2xl mx-auto">Get a free estimate in minutes. Call us or book online and we'll have your car running like new.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="tel:+15551234567" class="bg-slate-900 text-white font-medium px-6 py-3.5 rounded-xl hover:bg-slate-800 transition-colors flex items-center gap-2">
+                        <span class="iconify" data-icon="mdi:phone"></span> Call (555) 123-4567
+                    </a>
+                    <a href="#" onclick="showPage('contact')" class="bg-indigo-600 text-white font-medium px-6 py-3.5 rounded-xl hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-500/20 flex items-center gap-2">
+                        Book Online <span class="iconify" data-icon="mdi:arrow-right"></span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ============ PAGE 2: SERVICES ============ -->
+    <div id="page-services" class="page">
+
+        <section class="hero-gradient pt-32 pb-16 relative overflow-hidden">
+            <div class="blob w-72 h-72 bg-indigo-600/20 -top-20 right-20"></div>
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <span class="inline-block text-xs font-semibold uppercase tracking-widest text-indigo-400 mb-3">Our Services</span>
+                <h1 class="text-4xl md:text-5xl font-semibold text-white tracking-tight mb-4">Full Range of<br>Auto Repair Services</h1>
+                <p class="text-lg text-slate-400 max-w-xl">From routine maintenance to major repairs, we handle it all with precision and care.</p>
+            </div>
+        </section>
+
+        <section class="py-20">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <div class="bg-white rounded-2xl overflow-hidden card-hover border border-slate-100">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://picsum.photos/seed/engine-repair/400/250.jpg" alt="Engine Repair" class="w-full h-full object-cover img-hover">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-lg font-semibold">Engine Repair</h3>
+                                <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">Popular</span>
+                            </div>
+                            <p class="text-sm text-slate-500 leading-relaxed mb-4">Full engine diagnostics, rebuilds, and replacement. We work on all makes and models.</p>
+                            <p class="text-sm font-semibold text-slate-900">From <span class="text-indigo-600">$350</span></p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl overflow-hidden card-hover border border-slate-100">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://picsum.photos/seed/brake-service/400/250.jpg" alt="Brake Service" class="w-full h-full object-cover img-hover">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-lg font-semibold">Brake Service</h3>
+                            </div>
+                            <p class="text-sm text-slate-500 leading-relaxed mb-4">Pads, rotors, drums, calipers, and hydraulic system repair. Your safety is our priority.</p>
+                            <p class="text-sm font-semibold text-slate-900">From <span class="text-indigo-600">$120</span></p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl overflow-hidden card-hover border border-slate-100">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://picsum.photos/seed/oil-change/400/250.jpg" alt="Oil Change" class="w-full h-full object-cover img-hover">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-lg font-semibold">Oil & Lube</h3>
+                                <span class="text-xs font-medium text-green-600 bg-green-50 px-2.5 py-1 rounded-full">Quick</span>
+                            </div>
+                            <p class="text-sm text-slate-500 leading-relaxed mb-4">Conventional, synthetic, and high-mileage oil changes with multi-point inspection.</p>
+                            <p class="text-sm font-semibold text-slate-900">From <span class="text-indigo-600">$45</span></p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl overflow-hidden card-hover border border-slate-100">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://picsum.photos/seed/tire-shop/400/250.jpg" alt="Tire Service" class="w-full h-full object-cover img-hover">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold mb-3">Tire Service</h3>
+                            <p class="text-sm text-slate-500 leading-relaxed mb-4">Tire installation, rotation, balancing, alignment, and flat repair for all vehicle types.</p>
+                            <p class="text-sm font-semibold text-slate-900">From <span class="text-indigo-600">$25</span></p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl overflow-hidden card-hover border border-slate-100">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://picsum.photos/seed/ac-repair/400/250.jpg" alt="AC Repair" class="w-full h-full object-cover img-hover">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold mb-3">AC & Heating</h3>
+                            <p class="text-sm text-slate-500 leading-relaxed mb-4">Climate control diagnostics, refrigerant recharge, compressor repair, and more.</p>
+                            <p class="text-sm font-semibold text-slate-900">From <span class="text-indigo-600">$90</span></p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl overflow-hidden card-hover border border-slate-100">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://picsum.photos/seed/transmission/400/250.jpg" alt="Transmission" class="w-full h-full object-cover img-hover">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-lg font-semibold">Transmission</h3>
+                                <span class="text-xs font-medium text-orange-600 bg-orange-50 px-2.5 py-1 rounded-full">Major</span>
+                            </div>
+                            <p class="text-sm text-slate-500 leading-relaxed mb-4">Automatic and manual transmission service, fluid change, rebuild, and replacement.</p>
+                            <p class="text-sm font-semibold text-slate-900">From <span class="text-indigo-600">$500</span></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Process -->
+        <section class="py-20 bg-slate-50">
+            <div class="max-w-5xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <span class="inline-block text-xs font-semibold uppercase tracking-widest text-indigo-600 mb-3">How It Works</span>
+                    <h2 class="text-3xl font-semibold tracking-tight">Simple 3-Step Process</h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-5 text-white text-xl font-semibold">1</div>
+                        <h3 class="font-semibold mb-2">Book or Call</h3>
+                        <p class="text-sm text-slate-500">Schedule an appointment online or just walk in. We're ready for you.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-5 text-white text-xl font-semibold">2</div>
+                        <h3 class="font-semibold mb-2">Inspect & Estimate</h3>
+                        <p class="text-sm text-slate-500">We diagnose the issue and give you a clear, honest price estimate.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-5 text-white text-xl font-semibold">3</div>
+                        <h3 class="font-semibold mb-2">Repair & Drive</h3>
+                        <p class="text-sm text-slate-500">We fix it fast and right. Drive away with confidence, backed by our warranty.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ============ PAGE 3: ABOUT ============ -->
+    <div id="page-about" class="page">
+
+        <section class="hero-gradient pt-32 pb-16 relative overflow-hidden">
+            <div class="blob w-80 h-80 bg-indigo-600/20 bottom-0 left-10"></div>
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <span class="inline-block text-xs font-semibold uppercase tracking-widest text-indigo-400 mb-3">About Us</span>
+                <h1 class="text-4xl md:text-5xl font-semibold text-white tracking-tight mb-4">Built on Trust,<br>Driven by Quality</h1>
+                <p class="text-lg text-slate-400 max-w-xl">Serving our community since 2009 with honest, reliable auto repair.</p>
+            </div>
+        </section>
+
+        <!-- Story -->
+        <section class="py-20">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <h2 class="text-3xl font-semibold tracking-tight mb-6">Our Story</h2>
+                        <p class="text-slate-500 leading-relaxed mb-4">AutoFix Pro was founded by master mechanic Jake Harrison in 2009. What started as a two-bay garage has grown into a full-service repair center with 12 bays and a team of 8 certified technicians.</p>
+                        <p class="text-slate-500 leading-relaxed mb-4">Our philosophy has never changed: treat every customer like family and every car like your own. We believe in explaining problems clearly, offering fair prices, and standing behind every repair with a solid warranty.</p>
+                        <p class="text-slate-500 leading-relaxed">Today, we're proud to be one of the highest-rated repair shops in the area, with over 8,000 satisfied customers and counting.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <img src="https://picsum.photos/seed/garage-inside/320/240.jpg" alt="Garage" class="rounded-2xl w-full h-48 object-cover">
+                        <img src="https://picsum.photos/seed/team-mechanic/320/240.jpg" alt="Team" class="rounded-2xl w-full h-48 object-cover mt-8">
+                        <img src="https://picsum.photos/seed/tools-close/320/240.jpg" alt="Tools" class="rounded-2xl w-full h-48 object-cover">
+                        <img src="https://picsum.photos/seed/shop-front/320/240.jpg" alt="Shop" class="rounded-2xl w-full h-48 object-cover mt-8">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats -->
+        <section class="py-20 bg-slate-900 text-white">
+            <div class="max-w-5xl mx-auto px-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div>
+                        <div class="text-4xl font-semibold text-indigo-400 mb-1">15+</div>
+                        <div class="text-sm text-slate-400">Years in Business</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-semibold text-indigo-400 mb-1">8,000+</div>
+                        <div class="text-sm text-slate-400">Cars Serviced</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-semibold text-indigo-400 mb-1">8</div>
+                        <div class="text-sm text-slate-400">Certified Techs</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-semibold text-indigo-400 mb-1">4.9</div>
+                        <div class="text-sm text-slate-400">Star Rating</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team -->
+        <section class="py-20">
+            <div class="max-w-5xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <span class="inline-block text-xs font-semibold uppercase tracking-widest text-indigo-600 mb-3">Our Team</span>
+                    <h2 class="text-3xl font-semibold tracking-tight">Meet the Mechanics</h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <img src="https://picsum.photos/seed/person-jake/200/200.jpg" alt="Jake Harrison" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="font-semibold">Jake Harrison</h3>
+                        <p class="text-sm text-indigo-600 mb-2">Founder & Master Mechanic</p>
+                        <p class="text-sm text-slate-500">ASE Certified, 20+ years experience</p>
+                    </div>
+                    <div class="text-center">
+                        <img src="https://picsum.photos/seed/person-maria/200/200.jpg" alt="Maria Santos" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="font-semibold">Maria Santos</h3>
+                        <p class="text-sm text-indigo-600 mb-2">Lead Diagnostician</p>
+                        <p class="text-sm text-slate-500">ASE Certified, Electrical Specialist</p>
+                    </div>
+                    <div class="text-center">
+                        <img src="https://picsum.photos/seed/person-tom/200/200.jpg" alt="Tom Brewer" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="font-semibold">Tom Brewer</h3>
+                        <p class="text-sm text-indigo-600 mb-2">Transmission Specialist</p>
+                        <p class="text-sm text-slate-500">ASE Certified, 12+ years experience</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications -->
+        <section class="py-20 bg-slate-50">
+            <div class="max-w-5xl mx-auto px-6 text-center">
+                <span class="inline-block text-xs font-semibold uppercase tracking-widest text-indigo-600 mb-3">Certifications</span>
+                <h2 class="text-3xl font-semibold tracking-tight mb-12">Trusted & Certified</h2>
+                <div class="flex flex-wrap justify-center gap-8 md:gap-16">
+                    <div class="flex flex-col items-center gap-2">
+                        <span class="iconify text-5xl text-slate-400" data-icon="mdi:shield-check-outline"></span>
+                        <span class="text-sm font-medium text-slate-600">ASE Certified</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <span class="iconify text-5xl text-slate-400" data-icon="mdi:star-circle-outline"></span>
+                        <span class="text-sm font-medium text-slate-600">BBB A+ Rating</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <span class="iconify text-5xl text-slate-400" data-icon="mdi:certificate-outline"></span>
+                        <span class="text-sm font-medium text-slate-600">AAA Approved</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <span class="iconify text-5xl text-slate-400" data-icon="mdi:recycle-variant"></span>
+                        <span class="text-sm font-medium text-slate-600">Eco-Friendly</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ============ PAGE 4: CONTACT ============ -->
+    <div id="page-contact" class="page">
+
+        <section class="hero-gradient pt-32 pb-16 relative overflow-hidden">
+            <div class="blob w-72 h-72 bg-indigo-600/20 top-0 right-20"></div>
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <span class="inline-block text-xs font-semibold uppercase tracking-widest text-indigo-400 mb-3">Contact Us</span>
+                <h1 class="text-4xl md:text-5xl font-semibold text-white tracking-tight mb-4">Get in Touch<br>or Book a Repair</h1>
+                <p class="text-lg text-slate-400 max-w-xl">Call, visit, or fill out the form below. We respond to all inquiries within 1 hour during business hours.</p>
+            </div>
+        </section>
+
+        <section class="py-20">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid lg:grid-cols-3 gap-12">
+
+                    <!-- Contact Info -->
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="font-semibold mb-4">Visit Our Shop</h3>
+                            <div class="space-y-5">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                                        <span class="iconify text-indigo-600" data-icon="mdi:map-marker"></span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Address</p>
+                                        <p class="text-sm text-slate-500">1247 Main Street<br>Springfield, IL 62704</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                                        <span class="iconify text-indigo-600" data-icon="mdi:phone"></span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Phone</p>
+                                        <p class="text-sm text-slate-500">(555) 123-4567</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                                        <span class="iconify text-indigo-600" data-icon="mdi:email-outline"></span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Email</p>
+                                        <p class="text-sm text-slate-500">service@autofixpro.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold mb-4">Business Hours</h3>
+                            <div class="bg-slate-50 rounded-2xl p-5 space-y-2.5">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500">Monday – Friday</span>
+                                    <span class="font-medium">8:00 AM – 6:00 PM</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500">Saturday</span>
+                                    <span class="font-medium">9:00 AM – 4:00 PM</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500">Sunday</span>
+                                    <span class="font-medium text-red-500">Closed</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold mb-4">Follow Us</h3>
+                            <div class="flex gap-3">
+                                <a href="#" class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center hover:bg-indigo-50 hover:text-indigo-600 transition-colors text-slate-500">
+                                    <span class="iconify text-xl" data-icon="mdi:facebook"></span>
+                                </a>
+                                <a href="#" class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center hover:bg-indigo-50 hover:text-indigo-600 transition-colors text-slate-500">
+                                    <span class="iconify text-xl" data-icon="mdi:instagram"></span>
+                                </a>
+                                <a href="#" class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center hover:bg-indigo-50 hover:text-indigo-600 transition-colors text-slate-500">
+                                    <span class="iconify text-xl" data-icon="mdi:google"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+                            <h3 class="text-xl font-semibold mb-2">Book an Appointment</h3>
+                            <p class="text-sm text-slate-500 mb-8">Fill out the form and we'll confirm your appointment shortly.</p>
+
+                            <form id="contactForm" onsubmit="handleSubmit(event)" class="space-y-6">
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Full Name *</label>
+                                        <input type="text" required placeholder="John Doe" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Phone Number *</label>
+                                        <input type="tel" required placeholder="(555) 000-0000" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                                    </div>
+                                </div>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Email</label>
+                                        <input type="email" placeholder="john@email.com" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Vehicle *</label>
+                                        <input type="text" required placeholder="2020 Toyota Camry" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                                    </div>
+                                </div>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Service Needed *</label>
+                                        <select required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all bg-white">
+                                            <option value="">Select a service</option>
+                                            <option>Engine Repair</option>
+                                            <option>Brake Service</option>
+                                            <option>Oil Change</option>
+                                            <option>Tire Service</option>
+                                            <option>AC & Heating</option>
+                                            <option>Transmission</option>
+                                            <option>Diagnostics</option>
+                                            <option>Other</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Preferred Date</label>
+                                        <input type="date" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Describe the Issue</label>
+                                    <textarea rows="4" placeholder="Tell us what's going on with your vehicle..." class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all resize-none"></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-3.5 rounded-xl hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2">
+                                    <span class="iconify" data-icon="mdi:calendar-check"></span>
+                                    Submit Appointment Request
+                                </button>
+                            </form>
+
+                            <!-- Success Message (hidden by default) -->
+                            <div id="successMsg" class="hidden mt-6 bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
+                                <span class="iconify text-green-600 text-4xl mx-auto mb-2" data-icon="mdi:check-circle"></span>
+                                <h4 class="font-semibold text-green-800 mb-1">Request Submitted!</h4>
+                                <p class="text-sm text-green-600">We'll call you within 1 hour to confirm your appointment.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Map Placeholder -->
+        <section class="bg-slate-100">
+            <div class="w-full h-80 relative flex items-center justify-center">
+                <img src="https://picsum.photos/seed/map-view/1280/320.jpg" alt="Map location" class="w-full h-full object-cover opacity-60">
+                <div class="absolute bg-white/95 backdrop-blur-lg rounded-2xl p-6 shadow-xl text-center">
+                    <span class="iconify text-indigo-600 text-3xl mb-2 mx-auto block" data-icon="mdi:map-marker"></span>
+                    <p class="font-semibold text-sm">1247 Main Street, Springfield, IL</p>
+                    <a href="https://maps.google.com" target="_blank" class="text-xs text-indigo-600 hover:underline mt-1 inline-block">Open in Google Maps →</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="bg-slate-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div class="md:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+                            <span class="iconify text-white text-lg" data-icon="mdi:car-wrench"></span>
+                        </div>
+                        <span class="font-semibold text-lg">AutoFix<span class="text-indigo-400">Pro</span></span>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed">Honest, reliable auto repair since 2009. Your trusted neighborhood mechanics.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-sm mb-4">Quick Links</h4>
+                    <div class="space-y-2.5">
+                        <a href="#" onclick="showPage('home')" class="block text-sm text-slate-400 hover:text-white transition-colors">Home</a>
+                        <a href="#" onclick="showPage('services')" class="block text-sm text-slate-400 hover:text-white transition-colors">Services</a>
+                        <a href="#" onclick="showPage('about')" class="block text-sm text-slate-400 hover:text-white transition-colors">About Us</a>
+                        <a href="#" onclick="showPage('contact')" class="block text-sm text-slate-400 hover:text-white transition-colors">Contact</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-sm mb-4">Services</h4>
+                    <div class="space-y-2.5">
+                        <a href="#" onclick="showPage('services')" class="block text-sm text-slate-400 hover:text-white transition-colors">Engine Repair</a>
+                        <a href="#" onclick="showPage('services')" class="block text-sm text-slate-400 hover:text-white transition-colors">Brake Service</a>
+                        <a href="#" onclick="showPage('services')" class="block text-sm text-slate-400 hover:text-white transition-colors">Oil Change</a>
+                        <a href="#" onclick="showPage('services')" class="block text-sm text-slate-400 hover:text-white transition-colors">Transmission</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-sm mb-4">Contact</h4>
+                    <div class="space-y-2.5 text-sm text-slate-400">
+                        <p class="flex items-center gap-2"><span class="iconify text-indigo-400" data-icon="mdi:map-marker"></span> 1247 Main St, Springfield</p>
+                        <p class="flex items-center gap-2"><span class="iconify text-indigo-400" data-icon="mdi:phone"></span> (555) 123-4567</p>
+                        <p class="flex items-center gap-2"><span class="iconify text-indigo-400" data-icon="mdi:email"></span> service@autofixpro.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-slate-500">© 2024 AutoFix Pro. All rights reserved.</p>
+                <div class="flex gap-3">
+                    <a href="#" class="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-indigo-600 transition-colors">
+                        <span class="iconify" data-icon="mdi:facebook"></span>
+                    </a>
+                    <a href="#" class="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-indigo-600 transition-colors">
+                        <span class="iconify" data-icon="mdi:instagram"></span>
+                    </a>
+                    <a href="#" class="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-indigo-600 transition-colors">
+                        <span class="iconify" data-icon="mdi:google"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ============ JAVASCRIPT ============ -->
+    <script>
+        // Page Navigation
+        function showPage(pageName) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Show target page
+            document.getElementById('page-' + pageName).classList.add('active');
+
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active-link');
+                if (link.dataset.page === pageName) {
+                    link.classList.add('active-link');
+                }
+            });
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mobile Menu Toggle
+        let mobileOpen = false;
+        function toggleMobile() {
+            mobileOpen = !mobileOpen;
+            const menu = document.getElementById('mobileMenu');
+            const icon = document.getElementById('menuIcon');
+            if (mobileOpen) {
+                menu.classList.add('open');
+                icon.dataset.icon = 'mdi:close';
+            } else {
+                menu.classList.remove('open');
+                icon.dataset.icon = 'mdi:menu';
+            }
+        }
+
+        // Form Submit Handler
+        function handleSubmit(e) {
+            e.preventDefault();
+            const form = document.getElementById('contactForm');
+            const success = document.getElementById('successMsg');
+            form.style.display = 'none';
+            success.classList.remove('hidden');
+        }
+
+        // Close mobile menu on resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768 && mobileOpen) {
+                toggleMobile();
+            }
+        });
+    </script>
+
+</body>
+</html>
